@@ -7,14 +7,14 @@
     "system_function_id": "123456",
     "system_process_id": "20",
     "task_schedule_id": "654321",
-    "client_number": "6321",
-    "incoming_path": "C:\\Users\\bokbok\\source\\repos\\schred322\\Gateway\\Gateway\\data\\",
+    "client_number": "6321", 
     "exe_path": "",
     "status": "normal",
     "progress_indicator": "",
     "testing_mode": "false",
     "update_schedule": "",
-    "error_log_path": "C:\\Users\\bokbok\\source\\repos\\schred322\\Gateway\\Gateway\\errors\\error_log.txt",
+    "info_log_path": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\logging\\error_log.txt",
+    "error_log_path": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\logging\\error_log.txt",
     "schedule": [
       {
         "start": "",
@@ -34,13 +34,15 @@
     ],
     "files": [
       {
-        "name": "LOAN-5054",
-        "pattern": "ln5054_*.txt",
+        "name": "Test Document 01",
+        "pattern": "test_document_*.txt",
+        "source": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\data\\incoming\\",
         "routes": "route_m"
       },
       {
-        "name": "LOAN-5520",
-        "pattern": "ln5520_*.txt",
+        "name": "Test Document 02",
+        "pattern": "test_document_*.txt",
+        "source": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\data\\incoming\\",
         "routes": "route_b,route_c"
       }
     ],
@@ -52,7 +54,7 @@
             "method": "FileCopy",
             "parameters": [
               {
-                "destination": "C:\\Users\\bokbok\\source\\repos\\schred322\\Gateway\\Gateway\\data\\drop_folder\\",
+                "destination": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\data\\drop_folder\\",
                 "append_datetime": true,
                 "datetime_format": "_yyyyMMdd_HHmmss_",
                 "overwrite_file": false
@@ -63,7 +65,7 @@
             "method": "FileCopy",
             "parameters": [
               {
-                "destination": "C:\\Users\\bokbok\\source\\repos\\schred322\\Gateway\\Gateway\\data\\drop_folder2\\",
+                "destination": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\data\\drop_folder2\\",
                 "append_datetime": true,
                 "datetime_format": "yyMMddHHmmss",
                 "overwrite_file": false
@@ -79,7 +81,7 @@
             "method": "FileCopy",
             "parameters": [
               {
-                "destination": "C:\\Users\\bokbok\\source\\repos\\schred322\\Gateway\\Gateway\\data\\drop_folder\\",
+                "destination": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\data\\drop_folder\\",
                 "append_datetime": true,
                 "datetime_format": "_yyyy-MM-dd_HHmmss_",
                 "overwrite_file": false
@@ -96,8 +98,8 @@
             "parameters": [
               {
                 "file_pattern": "ln5054_*_*_064929_.txt",
-                "source": "C:\\Users\\bokbok\\source\\repos\\schred322\\Gateway\\Gateway\\data\\drop_folder\\",
-                "destination": "C:\\Users\\bokbok\\source\\repos\\schred322\\Gateway\\Gateway\\data\\outgoing\\",
+                "source": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\data\\drop_folder\\",
+                "destination": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\data\\outgoing\\",
                 "append_datetime": true,
                 "datetime_format": "yyyy-MM-dd",
                 "overwrite_file": false
@@ -109,8 +111,8 @@
             "parameters": [
               {
                 "file_pattern": "ln5054_*_*_064929_.txt",
-                "source": "C:\\Users\\bokbok\\source\\repos\\schred322\\Gateway\\Gateway\\data\\drop_folder\\",
-                "destination": "C:\\Users\\bokbok\\source\\repos\\schred322\\Gateway\\Gateway\\data\\outgoing\\",
+                "source": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\data\\drop_folder\\",
+                "destination": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\data\\outgoing\\",
                 "append_datetime": false,
                 "datetime_format": "yyyy-MM-dd",
                 "overwrite_file": false
@@ -126,7 +128,7 @@
             "method": "Validate",
             "parameters": [
               {
-                "destination": "C:\\Users\\bokbok\\source\\repos\\schred322\\Gateway\\Gateway\\data\\outgoing\\",
+                "destination": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\data\\outgoing\\",
                 "header_checks": "header,date,sequence",
                 "header_substring": [
                   {
@@ -153,7 +155,7 @@
             "method": "Zip",
             "parameters": [
               {
-                "destination": "C:\\Users\\bokbok\\source\\repos\\schred322\\Gateway\\Gateway\\data\\archive\\",
+                "destination": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\data\\archive\\",
                 "archive_name": "new_file.zip",
                 "file_pattern": "ln5054_*.txt",
                 "compression": "50%",
@@ -172,7 +174,7 @@
             "parameters": [
               {
                 "validation": true,
-                "destination": "C:\\Users\\bokbok\\source\\repos\\schred322\\Gateway\\Gateway\\data\\staged\\",
+                "destination": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\data\\staged\\",
                 "archive_name": "new_file.zip",
                 "file_pattern": "ln5054_*.txt",
                 "append_datetime": true,
@@ -184,4 +186,4 @@
       }
     ]
   }
-}
+} 
