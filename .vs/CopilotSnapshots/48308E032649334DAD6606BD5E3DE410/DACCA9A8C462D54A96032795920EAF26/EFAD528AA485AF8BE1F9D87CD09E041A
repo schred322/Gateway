@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Gateway.Providers
+{
+    public class DataServiceProvider
+    {
+
+        public async Task<dynamic> JsonServiceProvider()
+        {
+
+            return null;
+        }
+    }
+}

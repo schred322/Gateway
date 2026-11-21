@@ -1,8 +1,9 @@
 ﻿
 using Gateway.interfaces;
+using Gateway.Providers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using Newtonsoft.Json; 
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Dynamic; 
@@ -11,68 +12,71 @@ using System.Reflection;
 namespace Gateway
 {
     public class Gateway
-    {
-        private static readonly string _incoming_path = @"C:\Users\bokbok\source\repos\Gateway\Gateway\data\installs\install-test.json";
-        //public static dynamic _job = new ExpandoObject();
-        const string gateway_operations = "Gateway.Operations"; 
-        //public dynamic _job = new ExpandoObject();
-        //public dynamic _instance = new ExpandoObject();
-        public dynamic _log = new ExpandoObject();
+    { 
+        const string gateway_operations = "Gateway.Operations";
+        public ILogService _log;
         public IJobServices _job;
-        Common.Extensions _extentions;
-
+          
         //public ILogService _log;  
         public Gateway(IJobServices job, ILogService log)
         {
-            _job = job;
+            _job = job; 
             _log = log;
-            _extentions = new Common.Extensions();
-
-            using StreamReader file_stream = File.OpenText(_incoming_path);
-            _job.Instance = new JsonSerializer().Deserialize(file_stream, typeof(object));
+             
+            _log.LogInfo($"***************************** Loading Job *****************************", separator: true);
+            _log.LogInfo($"Job: {_job.Task.name.Value}");
         }
-         
+ 
         public async Task RunAsync()
         {
             try
-            { 
-                foreach (var file in _job.Instance.task.files)
-                { 
-                    _job.Instance.FilePattern = file.pattern.Value;
-                    _job.Instance.FilePath = file.source.Value;
+            {
+                foreach (var file in _job.Task.files)
+                {
+                    var directory = new DirectoryInfo(file.source.Value);
 
-                    _log.LogInfo($"Processing file pattern: {file.pattern.Value} in path: {file.source.Value}");
-                    foreach (FileInfo file_info in new DirectoryInfo(file.source.Value).GetFiles(file.pattern.Value))
+                    foreach (var fileInfo in directory.GetFiles(file.pattern.Value))
                     {
-                        _job.Instance.FileName = file_info.Name;
-                        _job.Instance.CurrentFilePathAndName = file_info.FullName; 
+                        _job.FileInfo = fileInfo;
+                        _log.LogInfo($"FileInfo: {fileInfo}");
 
-                        _log.LogInfo($"Processing file: {file_info.FullName}");
-                        
-                        foreach (var route in _job.Instance.task.routes)
-                        {
-                            _log.LogInfo($"Checking route: {route.name.Value}");
-                            if (file.routes.Value.Contains(route.name.Value))
-                            {
-                                _log.LogInfo($"Route matched: {route.name.Value}");
-                                foreach (var op in route.operations)
-                                {
-                                    _log.LogInfo($"Executing operation: {op.method.Value} with parameters: {JsonConvert.SerializeObject(op.parameters)}");
-                                    foreach (var c in Assembly.GetExecutingAssembly().GetTypes().Where(m => m.Name.Contains(typeof(Operations).Name)))
-                                    {
-                                        _log.LogInfo($"Found class: {c.Name} for operation: {op.method.Value}");
-                                        Type[] parameterTypes = new Type[] { typeof(ILogService), typeof(IJobServices) }; 
-                                        var instance = Type.GetType(gateway_operations).GetConstructor(parameterTypes).Invoke(new object[] { _log, _job });
-                                        c.GetMethod(op.method.Value, BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance)
-                                            .Invoke(instance, new object[] { op.parameters[0] });
-                                    }
-                                }
-                            }
-                        }
+                        ProcessRoutes(file);
                     }
-                }
+                } 
+                _log.LogInfo($"Job Completed");
             }
-            catch (Exception e) { _log.LogError(e); }
+            catch (Exception e) {
+                _log.LogInfo($"An error was thrown in Gateway().RunAsync(); Check error log for details.");
+                _log.LogError(e); 
+            }
+        }
+
+        private void ProcessRoutes(dynamic file)
+        {
+            foreach (dynamic route in _job.Task.routes)
+            {
+                if (!file.routes.Value.Contains(route.name.Value))
+                    continue;
+
+                _log.LogInfo($"Route Match: {route.name.Value}");
+
+                foreach (var operation in route.operations)
+                    ExecuteOperation(operation);
+            }
+        }
+
+        private void ExecuteOperation(dynamic operation)
+        {
+            _log.LogInfo($"Operation: {operation.method.Value}"); 
+
+            var operations = new Operations(_log, _job);
+            var method = typeof(Operations).GetMethod(operation.method.Value);
+
+            if (method == null)
+                throw new InvalidOperationException(
+                    $"Operation '{operation.method.Value}' was not found.");
+
+            method.Invoke(operations, new[] { operation.parameters[0] });
         }
     }
 }

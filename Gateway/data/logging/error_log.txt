@@ -1,0 +1,36 @@
+ error-log: [2026-11-20 15:46:02] Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: Cannot perform runtime binding on a null reference
+   at CallSite.Target(Closure, CallSite, Object, Object, Object[])
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid3[T0,T1,T2](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Gateway.Gateway.RunAsync() in C:\Users\bokbok\source\repos\Gateway\Gateway\Gatway.cs:line 58
+error-log: [2026-11-20 15:46:10] Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: Cannot perform runtime binding on a null reference
+   at CallSite.Target(Closure, CallSite, Object, Object, Object[])
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid3[T0,T1,T2](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Gateway.Gateway.RunAsync() in C:\Users\bokbok\source\repos\Gateway\Gateway\Gatway.cs:line 58
+error-log: [2026-11-20 15:46:19] Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: Cannot perform runtime binding on a null reference
+   at CallSite.Target(Closure, CallSite, Object, Object, Object[])
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid3[T0,T1,T2](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Gateway.Gateway.RunAsync() in C:\Users\bokbok\source\repos\Gateway\Gateway\Gatway.cs:line 58
+error-log: [2026-11-20 15:48:20] Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: Cannot perform runtime binding on a null reference
+   at CallSite.Target(Closure, CallSite, Object, Object, Object[])
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid3[T0,T1,T2](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Gateway.Gateway.RunAsync() in C:\Users\bokbok\source\repos\Gateway\Gateway\Gatway.cs:line 58
+error-log: [2026-11-20 15:50:02] Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: Cannot perform runtime binding on a null reference
+   at CallSite.Target(Closure, CallSite, Object, Object, Object[])
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid3[T0,T1,T2](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Gateway.Gateway.RunAsync() in C:\Users\bokbok\source\repos\Gateway\Gateway\Gatway.cs:line 57
+error-log: [2026-11-20 15:50:11] Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: Cannot perform runtime binding on a null reference
+   at CallSite.Target(Closure, CallSite, Object, Object, Object[])
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid3[T0,T1,T2](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Gateway.Gateway.RunAsync() in C:\Users\bokbok\source\repos\Gateway\Gateway\Gatway.cs:line 57
+error-log: [2026-11-20 16:00:35] Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: Cannot perform runtime binding on a null reference
+   at CallSite.Target(Closure, CallSite, Object, Object, Object[])
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid3[T0,T1,T2](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Gateway.Gateway.RunAsync()
+error-log: [2026-11-20 16:03:02] Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: Cannot perform runtime binding on a null reference
+   at CallSite.Target(Closure, CallSite, Object, Object, Object[])
+   at System.Dynamic.UpdateDelegates.UpdateAndExecuteVoid3[T0,T1,T2](CallSite site, T0 arg0, T1 arg1, T2 arg2)
+   at Gateway.Gateway.RunAsync() in C:\Users\bokbok\source\repos\Gateway\Gateway\Gatway.cs:line 57
+2026-11-21 11:26:06 error-log: System.InvalidOperationException: Operation 'CopyFrom' was not found.
+   at Gateway.Gateway.ExecuteOperation(Object operation) in C:\Users\bokbok\source\repos\Gateway\Gateway\Gatway.cs:line 76
+   at Gateway.Gateway.ProcessRoutes(Object file) in C:\Users\bokbok\source\repos\Gateway\Gateway\Gatway.cs:line 64
+   at Gateway.Gateway.RunAsync() in C:\Users\bokbok\source\repos\Gateway\Gateway\Gatway.cs:line 43

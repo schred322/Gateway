@@ -2,8 +2,8 @@
 {
     public interface IJobServices
     {
-        public dynamic Instance { get; set; }
-
-        void LoadJob();
+        //public dynamic Task { get; set; }
+        public dynamic FileInfo { get; set; }
+        public dynamic Task { get; set; } 
     }
 }

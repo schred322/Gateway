@@ -6,45 +6,73 @@ using System.Dynamic;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 
 namespace Gateway.Services
 {
 
     public class LogServices : ILogService
-    {
-        string _incoming_path = @"C:\Users\bokbok\source\repos\Gateway\Gateway\data\installs\install-test.json";
-        dynamic _log = new ExpandoObject();
-
+    { 
+        private readonly IConfiguration _config;  
         public LogServices() 
-        { 
-            //using FileStream fileStream = File.OpenRead(_incoming_path);
-            //JsonNode? _log = JsonSerializer.Deserialize<JsonNode>(fileStream);
-
-            //using StreamReader file_stream = File.OpenText(_incoming_path);
-            //_log = new JsonSerializer().Deserialize(file_stream.BaseStream, typeof(object), null);
-
-           //var x = _log.task.error_log_path.Value;
-
-        }
-
-        public void Logger(string log_file, dynamic log)
         {
-            using StreamWriter writer = new StreamWriter(log_file, append: true);
-            writer.WriteLine(string.Empty);
-            writer.WriteLine(string.Concat("log_date_time: ", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")));
-            writer.WriteLine(log.InnerException);
+            _config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+                                                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                                                .Build(); 
         }
+
+        /// <summary>
+        /// Log to file
+        /// </summary>
+        /// <param name="log_file"></param>
+        /// <param name="log_entry"></param>
+        public void Logger(string log_file, string log_entry)
+        {
+            using StreamWriter writer = new StreamWriter(log_file, append: true);  
+            writer.WriteLine(log_entry); 
+        }
+
+        /// <summary>
+        /// Log error
+        /// </summary>
+        /// <param name="log"></param>
         public void LogError(dynamic log)
         {
-            //var d = Path.GetDirectoryName(_log.task.error_log_path.Value);
-            //if (!Directory.Exists(d)) { Directory.CreateDirectory(d); }
-            //Logger(_log.task.error_log_path.Value, log);
+            var entry_log =  $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} error-log: {log}";
+
+            Logger(_config.GetValue<string>("LogSettings:ErrorLogPath") ?? string.Empty, entry_log);
+             
+            LogDebug("error-log", entry_log); 
         }
-        public void LogInfo(dynamic log)
+         
+        /// <summary>
+        /// Log information
+        /// </summary>
+        /// <param name="log"></param>
+        public void LogInfo(dynamic log, bool separator = false)
+        { 
+            var entry_log = (separator)
+                            ? $"{log}" 
+                            : $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} info-log: {log}";  
+
+            Logger(_config.GetValue<string>("LogSettings:InfoLogPath") ?? string.Empty, entry_log);
+
+            LogDebug("info-log", entry_log);
+        }
+
+        /// <summary>
+        /// Set debug to output window, located in appsettings.config
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="log_entry"></param>
+        public void LogDebug(string type, string log_entry)
         {
-            //var d = Path.GetDirectoryName(_log.task.info_log_path.Value);
-            //if (!Directory.Exists(d)) { Directory.CreateDirectory(d); }
-            //Logger(_log.task.info_log_path.Value, log);
+            if (_config.GetValue<bool>("LogSettings:OutputDebug"))
+            {
+                Debug.WriteLine($"{type}: {log_entry}");
+            }
         }
     }
 }

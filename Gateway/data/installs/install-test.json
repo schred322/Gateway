@@ -12,9 +12,7 @@
     "status": "normal",
     "progress_indicator": "",
     "testing_mode": "false",
-    "update_schedule": "",
-    "info_log_path": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\logging\\error_log.txt",
-    "error_log_path": "C:\\Users\\bokbok\\source\\repos\\Gateway\\Gateway\\logging\\error_log.txt",
+    "update_schedule": "", 
     "schedule": [
       {
         "start": "",

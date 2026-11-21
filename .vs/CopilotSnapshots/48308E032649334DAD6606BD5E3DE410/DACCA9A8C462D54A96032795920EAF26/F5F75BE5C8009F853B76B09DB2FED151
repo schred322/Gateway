@@ -1,0 +1,22 @@
+﻿using Newtonsoft.Json;
+using System.IO;
+
+namespace Gateway.Providers
+{
+    public class DataServiceProvider
+    {
+        public dynamic JsonServiceProvider(string filePath)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
+
+            if (!File.Exists(filePath))
+            {
+                throw new FileNotFoundException("The JSON file was not found.", filePath);
+            }
+
+            using StreamReader fileStream = File.OpenText(filePath);
+            return new JsonSerializer().Deserialize<dynamic>(fileStream)
+                ?? throw new JsonException($"The JSON file '{filePath}' is empty or invalid.");
+        }
+    }
+}

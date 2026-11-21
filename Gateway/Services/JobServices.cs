@@ -1,55 +1,37 @@
 ﻿using Gateway.interfaces;
+using Gateway.Providers;
 using System;
-using System.Collections.Generic;
 using System.Dynamic;
-using System.Text;
-using System.Text.Json;
 
 namespace Gateway.Services
 { 
     public class JobServices : IJobServices
     {
         ILogService _log; 
-        string _incoming_path { get; set; }
+        readonly DataServiceProvider _dataServiceProvider;
+        const string IncomingPath = @"C:\Users\bokbok\source\repos\Gateway\Gateway\data\installs\install-test.json";
+        
+        //public dynamic Task { get; set; }
+        public dynamic FileInfo { get; set; } = new ExpandoObject();
+        public dynamic Task { get; set; } = new ExpandoObject();
 
-        dynamic _instance;
-        public dynamic Instance 
+        public JobServices(ILogService log, DataServiceProvider dataServiceProvider)
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    return new ExpandoObject();
-                }
-                return _instance;
-            }
-                
-            set
-            {
-                _instance = value;
-            } 
-        }
-
-        public JobServices(ILogService log)
-        {
-            _log = log;
-            _instance = Instance;
+            _log = log; 
+            _dataServiceProvider = dataServiceProvider;
 
             LoadJob();
-            //string _incoming_path = @"C:\Users\bokbok\source\repos\Gateway\Gateway\data\installs\install-test.json";
-            //using StreamReader file_stream = File.OpenText(_incoming_path);
-            //Job = JsonSerializer.Deserialize<dynamic>(file_stream.BaseStream);
-        }
+        } 
 
-        public void LoadJob()
+        private void LoadJob()
         {
-
-            _log.LogInfo("JobServices.LoadJob");
-
-            string _incoming_path = @"C:\Users\bokbok\source\repos\Gateway\Gateway\data\installs\install-test.json";
-            using StreamReader file_stream = File.OpenText(_incoming_path);
-            Instance = JsonSerializer.Deserialize<dynamic>(file_stream.BaseStream);
-
-        }
+            var data = _dataServiceProvider.LoadJsonFile(IncomingPath);
+            if (data == null)
+            {
+                _log.LogError($"Failed to load job data from {IncomingPath}");
+                throw new Exception($"Failed to load job data from {IncomingPath}");
+            }
+            Task =  data.task; 
+        } 
     }
 }

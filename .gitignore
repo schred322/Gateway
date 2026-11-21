@@ -2,7 +2,6 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/Gateway/bin/Debug/net10.0
-/.vs
+/Gateway/bin/Debug/net10.0 
 /Gateway/obj
 /Gateway/_backup
