@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="_backup\Gatway.cs" />
+    <Compile Remove="Sandbox\Gatway.cs" />
+    <Compile Remove="Sandbox\JsonFormGenerator.cs" />
+    <Compile Remove="Sandbox\Operations.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,13 +21,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="data\archive\" />
-    <Folder Include="data\drop_folder2\" />
-    <Folder Include="data\drop_folder\" />
-    <Folder Include="data\errors\" />
+    <Folder Include="data\dropfolders\archive\" />
+    <Folder Include="data\dropfolders\drop_folder2\" />
+    <Folder Include="data\dropfolders\drop_folder1\" />
     <Folder Include="data\logging\" />
-    <Folder Include="data\outgoing\" />
-    <Folder Include="_backup\" />
+    <Folder Include="data\dropfolders\finance\" />
+    <Folder Include="data\dropfolders\parts\" />
+    <Folder Include="data\dropfolders\outgoing\" />
+    <Folder Include="Sandbox\" />
   </ItemGroup>
 
   <ItemGroup>

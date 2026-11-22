@@ -1,4 +1,4 @@
-﻿using Gateway.interfaces;
+﻿using Gateway.Interfaces;
 using Gateway.Providers;
 using Gateway.Services;
 using Microsoft.Extensions.Configuration;
@@ -8,9 +8,9 @@ using Microsoft.Extensions.Hosting;
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
 // 2. Register your services and your main application class
-builder.Services.AddTransient<IJobServices, JobServices>();
-builder.Services.AddTransient<ILogService, LogServices>(); 
-builder.Services.AddTransient<DataServiceProvider>();
+builder.Services.AddTransient<IJobService, JobService>();
+builder.Services.AddTransient<ILogService, LogService>(); 
+builder.Services.AddTransient<FileServiceProvider>();
 builder.Services.AddTransient<Gateway.Gateway>();
 //builder.Services.AddTransient<IConfiguration>();
 

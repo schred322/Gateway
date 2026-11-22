@@ -1,4 +1,4 @@
-﻿namespace Gateway.interfaces
+﻿namespace Gateway.Interfaces
 {
     public interface ILogService
     { 

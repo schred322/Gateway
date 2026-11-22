@@ -1,24 +1,14 @@
 ﻿
-using Gateway.interfaces;
-using Gateway.Providers;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json; 
-using Newtonsoft.Json.Linq;
-using System.Diagnostics;
-using System.Dynamic; 
-using System.Reflection;
+using Gateway.Interfaces;
+using Gateway.Modules;
 
 namespace Gateway
 {
     public class Gateway
-    { 
-        const string gateway_operations = "Gateway.Operations";
+    {  
         public ILogService _log;
-        public IJobServices _job;
-          
-        //public ILogService _log;  
-        public Gateway(IJobServices job, ILogService log)
+        public IJobService _job;  
+        public Gateway(IJobService job, ILogService log)
         {
             _job = job; 
             _log = log;
@@ -26,13 +16,14 @@ namespace Gateway
             _log.LogInfo($"***************************** Loading Job *****************************", separator: true);
             _log.LogInfo($"Job: {_job.Task.name.Value}");
         }
- 
         public async Task RunAsync()
         {
             try
             {
                 foreach (var file in _job.Task.files)
                 {
+                    _job.FileParam = file;
+
                     var directory = new DirectoryInfo(file.source.Value);
 
                     foreach (var fileInfo in directory.GetFiles(file.pattern.Value))
@@ -50,7 +41,6 @@ namespace Gateway
                 _log.LogError(e); 
             }
         }
-
         private void ProcessRoutes(dynamic file)
         {
             foreach (dynamic route in _job.Task.routes)
@@ -64,17 +54,16 @@ namespace Gateway
                     ExecuteOperation(operation);
             }
         }
-
         private void ExecuteOperation(dynamic operation)
         {
             _log.LogInfo($"Operation: {operation.method.Value}"); 
 
-            var operations = new Operations(_log, _job);
-            var method = typeof(Operations).GetMethod(operation.method.Value);
+            var operations = new FileOperations(_log, _job);
+            var method = typeof(FileOperations).GetMethod(operation.method.Value);
 
             if (method == null)
                 throw new InvalidOperationException(
-                    $"Operation '{operation.method.Value}' was not found.");
+                    $"FileOperations '{operation.method.Value}' was not found.");
 
             method.Invoke(operations, new[] { operation.parameters[0] });
         }

@@ -1,0 +1,100 @@
+{
+  "task": {
+    "name": "gateway-task-name-here",
+    "description": "this is the description of the task",
+    "data": [
+      {
+        "server": "sql01",
+        "database": "dbo.PartsOrders",
+        "connection_string": "some_string_here"
+      }
+    ],
+    "files": [
+      {
+        "name": "Parts List",
+        "description": "This is a parts list document",
+        "pattern": "parts_list_exterior_*.csv",
+        "source": "C:\\Users\\bokbok\\source\\repos\\_GatewayDropFolders\\incoming\\",
+        "routes": "Archive,Outgoing"
+      },
+      {
+        "name": "Parts List-2",
+        "description": "This is a parts list document",
+        "pattern": "parts_list_*.csv",
+        "source": "C:\\Users\\bokbok\\source\\repos\\_GatewayDropFolders\\incoming\\",
+        "routes": "PartsFolder"
+      }  
+    ],
+    "routes": [
+      {
+        "name": "DataTransfer",
+        "operations": [
+          {
+            "method": "GetAllOrders",
+            "parameters": []
+          },
+          {
+            "method": "SetOrdersList",
+            "parameters": [
+              {
+                "data_table": "table_name"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Archive",
+        "operations": [
+          {
+            "method": "FileCopy",
+            "parameters": [
+              {
+                "destination": "C:\\Users\\bokbok\\source\\repos\\_GatewayDropFolders\\archive\\",
+                "append_datetime": true,
+                "datetime_format": "-yyyyMMdd-HHmmssfffffff",
+                "overwrite_file": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Outgoing",
+        "operations": [
+          {
+            "method": "FileCopy",
+            "parameters": [
+              {
+                "destination": "C:\\Users\\bokbok\\source\\repos\\_GatewayDropFolders\\outgoing\\",
+                "append_datetime": true,
+                "datetime_format": "-yyyyMMdd-HHmmssfffffff",
+                "rename": "",
+                "overwrite_file": false
+              }
+            ]
+          }
+
+        ]
+      },
+      {
+        "name": "PartsFolder",
+        "operations": [
+          {
+            "method": "FileMove",
+            "parameters": [
+              {
+                "destination": "C:\\Users\\bokbok\\source\\repos\\_GatewayDropFolders\\parts\\",
+                "append_datetime": true,
+                "datetime_format": "-yyyyMMdd-HHmmssfffffff",
+                "rename": "February_parts_list_exterior.txt",
+                "overwrite_file": false
+              }
+            ]
+          }
+
+        ]
+      }
+    ]
+  }
+} 

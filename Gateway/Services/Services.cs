@@ -1,4 +1,4 @@
-﻿using Gateway.interfaces;
+﻿using Gateway.Interfaces;
 using System;
 using System.IO;
 
