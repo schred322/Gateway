@@ -2,11 +2,36 @@
   "task": {
     "name": "gateway-task-name-here",
     "description": "this is the description of the task",
-    "data": [
+    "db": [
       {
-        "server": "sql01",
-        "database": "dbo.PartsOrders",
-        "connection_string": "some_string_here"
+        "source_connection_string": "Server=mssqlserver01;Database=DbProcess;Trusted_Connection=True;",
+        "destination_connection_string": "Server=mssqlserver01;Database=DbProcess;Trusted_Connection=True;"
+      }
+    ],
+    "routines": [
+      {
+        //types [db2db, db2io, db2api]
+        "name": "db2db",
+        "description": "This routine is responsible for transferring data from the database to a file and vice versa.",
+        "namespace": "Gateway.Modules.DbOperations",
+        "operations": [
+          {
+            "method": "GetSourceDbData",
+            "parameters": [
+              {
+                "procedure": "dbo.PartsList"
+              }
+            ]
+          },
+          {
+            "method": "SetOrdersList",
+            "parameters": [
+              {
+                "data_table": "table_name"
+              }
+            ]
+          }
+        ]
       }
     ],
     "files": [
@@ -23,7 +48,7 @@
         "pattern": "parts_list_*.csv",
         "source": "C:\\Users\\bokbok\\source\\repos\\_GatewayDropFolders\\incoming\\",
         "routes": "PartsFolder"
-      }  
+      }
     ],
     "routes": [
       {

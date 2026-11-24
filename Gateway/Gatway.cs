@@ -7,19 +7,37 @@ namespace Gateway
     public class Gateway
     {  
         public ILogService _log;
-        public IJobService _job;  
-        public Gateway(IJobService job, ILogService log)
+        public IJobService _job;
+        public IDbService _db;
+        public Gateway(IJobService job, ILogService log, IDbService db)
         {
             _job = job; 
             _log = log;
-             
+            _db = db;
+
             _log.LogInfo($"***************************** Loading Job *****************************", separator: true);
             _log.LogInfo($"Job: {_job.Task.name.Value}");
         }
+       
         public async Task RunAsync()
         {
             try
-            {
+            { 
+                foreach (var routine in _job.Task.routines)
+                {  
+                    foreach (var operation in routine.operations)
+                    {
+                        var operations = new DbOperations(_log, _job, _db);
+                        var method = typeof(DbOperations).GetMethod(operation.method.Value);
+
+                        if (method == null)
+                            throw new InvalidOperationException(
+                                $"DbOperations '{operation.method.Value}' was not found.");
+
+                        await (Task)method.Invoke(operations, new[] { operation.db_params[0], operation.proc_params[0] });
+                    }
+                }
+
                 foreach (var file in _job.Task.files)
                 {
                     _job.FileParam = file;

@@ -9,7 +9,11 @@ HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
 // 2. Register your services and your main application class
 builder.Services.AddTransient<IJobService, JobService>();
-builder.Services.AddTransient<ILogService, LogService>(); 
+builder.Services.AddTransient<ILogService, LogService>();
+
+builder.Services.AddTransient<IDbServiceProvider, DbServiceProvider>(); 
+builder.Services.AddTransient<IDbService, DbService>();
+
 builder.Services.AddTransient<FileServiceProvider>();
 builder.Services.AddTransient<Gateway.Gateway>();
 //builder.Services.AddTransient<IConfiguration>();

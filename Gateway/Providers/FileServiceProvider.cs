@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using Gateway.Interfaces;
+using Newtonsoft.Json;
 using System.IO;
 
 namespace Gateway.Providers
 {
-    public class FileServiceProvider
+    public class FileServiceProvider : IFileServiceProvider
     {
         public dynamic LoadJsonFile(string filePath)
         {
