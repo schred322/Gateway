@@ -1,0 +1,54 @@
+/*
+
+
+*/
+{
+  "task": {
+    "name": "gateway-task-db-2-db",
+    "description": "this is the description of the task",
+    "routines": [
+      {
+        "module": "DbOperations",
+        "description": "This routine is responsible for transferring data from the database to a file and vice versa.",
+        "operations": [
+          {
+            "method": "GetSourceDbDataWithParameters",
+            "db_params": [
+              {
+                "connection_string": "Server=DESKTOP-DB6VN8I\\MSSQLSERVER01;Database=DbProcess;Integrated Security=True;Trusted_Connection=True;TrustServerCertificate=True;",
+                "sql_text": "dbo.GetPartsListByVendor"
+              }
+            ],
+            "proc_params": [
+              {
+                "VendorId": "5"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "module": "DbOperations",
+        "description": "This routine is responsible for transferring data from the database to a file and vice versa.",
+        "operations": [
+          {
+            "method": "SetDestinationDbDataWithParameters",
+            "db_params": [
+              {
+                "connection_string": "Server=DESKTOP-DB6VN8I\\MSSQLSERVER01;Database=DbProcess;Integrated Security=True;Trusted_Connection=True;TrustServerCertificate=True;",
+                "sql_text": "dbo.SetPartByVendor",
+                "sql_type": "StoredProcedure",
+                "table_name": "dbo.Parts"
+              }
+            ],
+            "proc_params": [
+              {
+                "VendorId": "5"
+              }
+            ]
+          }
+        ]
+      } 
+    ]
+  }
+}

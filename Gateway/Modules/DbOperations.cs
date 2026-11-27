@@ -16,20 +16,24 @@ namespace Gateway.Modules
             _db = db;
         }
 
-        public async Task GetPartsListByVendor(dynamic db_params, dynamic proc_params)
+        /// <summary>
+        /// Get source data with parameters
+        /// </summary>
+        /// <param name="db_params"></param>
+        /// <param name="proc_params"></param>
+        /// <returns></returns>
+
+        public async Task GetSourceDbDataListWithParametersAsync(dynamic db_params, dynamic proc_params)
         {  
-            var result = await _db.SqlSource(db_params, proc_params);
+            var result = await _db.SourceDb_DataListRetrievalAsync(db_params, proc_params);
             
-            _job.DbData = result;
+            _job.DbDataList = result;
         }
 
-        public async Task SetPartByVendor(dynamic db_params, dynamic proc_params)
-        {
-            var sqlText = db_params.sql_text.Value;
-
-            var x = _job.DbData;
-
-            await _db.SqlDestination(db_params.source_connection_string.Value, sqlText, proc_params); 
+        public async Task SetDestinationDbDataWithParametersAsync(dynamic db_params, dynamic proc_params)
+        { 
+            var ret = await _db.DestinationDb_DataListTransferAsync(_job.DbDataList, db_params, proc_params);
+            // todo: Handle the result if needed
         }
     }
 }

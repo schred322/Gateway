@@ -17,22 +17,19 @@ namespace Gateway.Services
             _dbServiceProvider = dbServiceProvider; 
         }
 
-        public async Task<List<dynamic>> SqlSource(dynamic db_params, dynamic proc_params)
+        public async Task<List<dynamic>> SourceDb_DataListRetrievalAsync(dynamic db_params, dynamic proc_params)
         {
-            await using var connection = _dbServiceProvider.GetSqlConnection(db_params.source_connection_string.Value); 
-            return await new DataAccessDbService().SqlSource(connection, db_params, proc_params); 
+            await using var connection = _dbServiceProvider.GetSqlConnection(db_params.connection_string.Value); 
+            return await new DataAccessDbService().GetSourceDbDataListAsync(connection, db_params, proc_params); 
         }
 
-        public async Task SqlDestination(dynamic data, dynamic db_params, dynamic proc_params)
+        public async Task<List<dynamic>> DestinationDb_DataListTransferAsync(dynamic data, dynamic db_params, dynamic proc_params)
         { 
-            await using var connection = _dbServiceProvider.GetSqlConnection(db_params.destination_connection_string.Value);
-            await new DataAccessDbService().SqlDestination(connection, data, db_params.sql_text.Value, proc_params);
+            await using var connection = _dbServiceProvider.GetSqlConnection(db_params.connection_string.Value);
+            var x = await new DataAccessDbService().SetDestinationDbDataListAsync(connection, data, db_params, proc_params);
+            //todo: return
+            return [];
         }
-
-        public async Task<List<dynamic>> GetPartsListAll()
-        {
-            // Implementation for getting parts list
-            return new List<dynamic>();
-        }
+         
     }
 }

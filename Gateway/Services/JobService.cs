@@ -11,10 +11,10 @@ namespace Gateway.Services
         readonly FileServiceProvider _fileService;
         //const string IncomingPath = @"C:\Users\bokbok\source\repos\Gateway\Gateway\Jobs\install-test.json";
         //const string IncomingPath = @"C:\Users\bokbok\source\repos\Gateway\Gateway\Jobs\template_file_operations.json";
-        const string IncomingPath = @"C:\Users\bokbok\source\repos\Gateway\Gateway\Jobs\template_db_layout.json";
-        public dynamic DbData { get; set; } = new ExpandoObject();
+        const string IncomingPath = @"C:\Users\bokbok\source\repos\Gateway\Gateway\Jobs\template_db_to_file.json";
+        public dynamic DbDataList { get; set; } = new ExpandoObject();
         public dynamic FileInfo { get; set; } = new ExpandoObject();
-        public dynamic FileParam { get; set; } = new ExpandoObject();
+        public dynamic FileParams { get; set; } = new ExpandoObject();
         public dynamic Task { get; set; } = new ExpandoObject(); 
         public JobService(ILogService log, FileServiceProvider fileService)
         {

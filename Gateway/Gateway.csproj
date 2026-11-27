@@ -31,7 +31,8 @@
     <Folder Include="data\dropfolders\finance\" />
     <Folder Include="data\dropfolders\parts\" />
     <Folder Include="data\dropfolders\outgoing\" />
-    <Folder Include="Sandbox\" />
+    <Folder Include="DbScripts\Procedures\" />
+    <Folder Include="DbScripts\Tables\" />
   </ItemGroup>
 
   <ItemGroup>

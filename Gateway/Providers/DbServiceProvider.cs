@@ -24,9 +24,9 @@ namespace Gateway.Providers
                 connection.Open();
                 return true; // Connection succeeded
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                //errorMessage = ex.Message;
+                //errorMessage = e.Message;
                 return false; // Connection failed
             }
         }

@@ -1,6 +1,9 @@
 ﻿
+using Gateway.Common;
 using Gateway.Interfaces;
 using Gateway.Modules;
+using System.Diagnostics;
+using GatewayUtilities = Gateway.Common.Utilities;
 
 namespace Gateway
 {
@@ -17,40 +20,20 @@ namespace Gateway
 
             _log.LogInfo($"***************************** Loading Job *****************************", separator: true);
             _log.LogInfo($"Job: {_job.Task.name.Value}");
-        }
-       
+        } 
+
         public async Task RunAsync()
         {
             try
-            { 
+            {
                 foreach (var routine in _job.Task.routines)
-                {  
-                    foreach (var operation in routine.operations)
-                    {
-                        var operations = new DbOperations(_log, _job, _db);
-                        var method = typeof(DbOperations).GetMethod(operation.method.Value);
+                { 
+                    if (routine.module.Value == "DbOperations")
+                        await ProcessDbOperations(routine);
 
-                        if (method == null)
-                            throw new InvalidOperationException(
-                                $"DbOperations '{operation.method.Value}' was not found.");
-
-                        await (Task)method.Invoke(operations, new[] { operation.db_params[0], operation.proc_params[0] });
-                    }
-                }
-
-                foreach (var file in _job.Task.files)
-                {
-                    _job.FileParam = file;
-
-                    var directory = new DirectoryInfo(file.source.Value);
-
-                    foreach (var fileInfo in directory.GetFiles(file.pattern.Value))
-                    {
-                        _job.FileInfo = fileInfo;
-                        _log.LogInfo($"FileInfo: {fileInfo}");
-
-                        ProcessRoutes(file);
-                    }
+                    if (routine.module.Value == "FileOperations")
+                        await ProcessFileOperations(routine);
+                    
                 } 
                 _log.LogInfo($"Job Completed");
             }
@@ -59,31 +42,49 @@ namespace Gateway
                 _log.LogError(e); 
             }
         }
-        private void ProcessRoutes(dynamic file)
+
+        private async Task ProcessDbOperations(dynamic routine)
         {
-            foreach (dynamic route in _job.Task.routes)
+            foreach (var operation in routine.operations)
             {
-                if (!file.routes.Value.Contains(route.name.Value))
-                    continue;
+                var method = typeof(DbOperations).GetMethod(operation.method.Value);
+                if (method == null)
+                    throw new InvalidOperationException($"DbOperations '{operation.method.Value}' was not found.");
 
-                _log.LogInfo($"Route Match: {route.name.Value}");
+                object[] param_group = {
+                    GatewayUtilities.ObjectNullCheck(operation.db_params),
+                    GatewayUtilities.ObjectNullCheck(operation.proc_params)
+                };
 
-                foreach (var operation in route.operations)
-                    ExecuteOperation(operation);
+                var ops = new DbOperations(_log, _job, _db);
+                await (Task)method.Invoke(ops, param_group);
             }
         }
-        private void ExecuteOperation(dynamic operation)
+
+        private async Task ProcessFileOperations(dynamic routine)
         {
-            _log.LogInfo($"Operation: {operation.method.Value}"); 
+            try
+            {
+                foreach (var operation in routine.operations)
+                {
+                    var method = typeof(FileOperations).GetMethod(operation.method.Value);
+                    if (method == null)
+                        throw new InvalidOperationException($"FileOperations '{operation.method.Value}' was not found.");
 
-            var operations = new FileOperations(_log, _job);
-            var method = typeof(FileOperations).GetMethod(operation.method.Value);
+                    var p = (operation.parameters != null)
+                                ? GatewayUtilities.ObjectNullCheck(operation.parameters)
+                                : operation;
 
-            if (method == null)
-                throw new InvalidOperationException(
-                    $"FileOperations '{operation.method.Value}' was not found.");
-
-            method.Invoke(operations, new[] { operation.parameters[0] });
-        }
+                    var ops = new FileOperations(_log, _job);
+                    method.Invoke(ops, new object[] { p });
+                }
+            }
+            catch(Exception e)
+            {
+                _log.LogInfo($"An error was thrown in Gateway().ProcessFileOperations(); Check error log for details.");
+                _log.LogError($"An error was thrown in Gateway().ProcessFileOperations(); Check error log for details.");
+                _log.LogError(e);
+            }
+        } 
     }
-}
+} 
