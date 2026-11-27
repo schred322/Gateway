@@ -29,9 +29,7 @@ namespace Gateway.Modules
                 var file_name = $"{((string)parameters.file_pattern.Value)
                                     .Replace("*", DateTime.Now.ToString($"{(string)parameters.datetime_format.Value}"))}";
                 var destination = string.Concat(parameters.destination.Value, file_name);
-                var t = new DataTable(); 
-                var x = ((DataTable)_job.DbDataList);
-
+                
                 File.WriteAllText(destination, JsonSerializer.Serialize(_job.DbDataList));
             }
             catch(Exception e)
@@ -41,8 +39,7 @@ namespace Gateway.Modules
                 throw;
             }
         }
-
-
+         
         public void FileCopy(dynamic parameters)
         { 
             _log.LogInfo($"FileCopy(Parameters: {parameters})");
@@ -56,8 +53,7 @@ namespace Gateway.Modules
                 _job.FileInfo.FullName,
                 Path.Combine(parameters.destination.Value, output),
                 parameters.overwrite_file.Value);
-        }
-
+        } 
         public void FileMove(dynamic parameters)
         {
             _log.LogInfo($"FileMove(Parameters: {parameters})");
@@ -71,8 +67,7 @@ namespace Gateway.Modules
                 _job.FileInfo.FullName,
                 Path.Combine(parameters.destination.Value, output),
                 parameters.overwrite_file.Value);
-        }
-
+        } 
         public void Zip(dynamic parameters)
         {
             _log.LogInfo($"Zip(Parameters: {parameters})");
